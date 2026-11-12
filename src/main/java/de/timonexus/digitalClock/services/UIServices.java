@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface UIServices {
     
-    public String getData();
+    public List<String> getData();
     public void setData(List<String> nData);
     public void refresh();
 }

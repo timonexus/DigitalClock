@@ -3,52 +3,86 @@ package de.timonexus.digitalClock.ui;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 import javax.swing.SwingUtilities;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.Color;
-import java.awt.BorderLayout;
+class GUITest {
 
-public class GUITest {
+    private GUI gui;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        assertFalse(
+            java.awt.GraphicsEnvironment.isHeadless(),
+            "GUI tests require a graphical environment."
+        );
+
+        SwingUtilities.invokeAndWait(() -> {
+            gui = new GUI();
+        });
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        if (gui != null) {
+            SwingUtilities.invokeAndWait(() -> {
+                gui.dispose();
+            });
+        }
+    }
 
     @Test
-    void testGUIInitialization() throws Exception {
-        SwingUtilities.invokeAndWait(() -> {
-            GUI gui = new GUI();
-
-            assertEquals("Digital Clock", gui.getTitle());
-            assertEquals(Color.BLACK, gui.getContentPane().getBackground());
-            assertEquals(BorderLayout.class, gui.getContentPane().getLayout().getClass());
-            assertTrue(gui.isVisible());
-
-            gui.dispose();
-        });
+    void testWindowInitialization() {
+        assertEquals("Digital Clock", gui.getTitle());
+        assertTrue(gui.isVisible());
+        assertTrue(gui.isUndecorated());
+        assertEquals(
+            javax.swing.JFrame.EXIT_ON_CLOSE,
+            gui.getDefaultCloseOperation()
+        );
     }
 
     @Test
     void testSetTime() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
-            GUI gui = new GUI();
-
             gui.setTime("12:30:45");
 
-            assertEquals("12:30:45", gui.getContentPane()
-                    .getComponent(0) instanceof javax.swing.JLabel label
-                    ? label.getText() : null);
-
-            gui.dispose();
+            assertEquals("12:30:45", gui.getTime());
         });
     }
 
     @Test
-    void testRefresh() throws Exception {
+    void testGetTimeInitially() {
+        assertEquals("--:--:--", gui.getTime());
+    }
+
+    @Test
+    void testSetDate() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
-            GUI gui = new GUI();
+            gui.setDate("Thursday, 12. November 2026");
 
-            assertDoesNotThrow(gui::refresh);
+            assertEquals(
+                "Thursday, 12. November 2026",
+                gui.getDate()
+            );
+        });
+    }
 
-            gui.dispose();
+    @Test
+    void testGetDateInitially() {
+        assertEquals("", gui.getDate());
+    }
+
+    @Test
+    void testRefresh() throws Exception {
+        assertDoesNotThrow(() -> {
+            SwingUtilities.invokeAndWait(() -> {
+                gui.refresh();
+            });
         });
     }
 }

@@ -1,8 +1,10 @@
 package de.timonexus.digitalClock.backend;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import de.timonexus.digitalClock.services.ClockUIService;
 import de.timonexus.digitalClock.ui.UIType;
@@ -10,11 +12,13 @@ import de.timonexus.digitalClock.ui.UIType;
 public class Clock {
     
     // attributes
-    private boolean runs;
+    private volatile boolean runs;
     private int timeInterval;
 
     private DateTimeFormatter dateTimeFormatter;
+    private DateTimeFormatter dateFormatter;
     private LocalDateTime time;
+    private LocalDate currentDate;
     private String timeString;
 
     private ClockUIService clockUIService;
@@ -28,6 +32,7 @@ public class Clock {
         this.runs = true;   
         this.timeInterval = 1000;
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        this.dateFormatter = DateTimeFormatter.ofPattern("EEEE, dd. MMMM yyyy", Locale.GERMAN);
 
         this.clockUIService = new ClockUIService(n_UiType);
     }
@@ -35,10 +40,19 @@ public class Clock {
     // method for running the clock
     public void startClock(){
         try {
-            while(runs){
+            while (runs) {
                 this.time = LocalDateTime.now();
+
+                LocalDate newDate = this.time.toLocalDate();
                 this.timeString = this.time.format(this.dateTimeFormatter);
-                this.clockUIService.setData(List.of(this.timeString));
+
+                if (this.currentDate == null || !this.currentDate.equals(newDate)) {
+                    this.currentDate = newDate;
+                    this.clockUIService.setData(List.of(this.timeString, this.currentDate.format(dateFormatter)));
+                } else {
+                    this.clockUIService.setData(List.of(this.timeString));
+                }
+
                 Thread.sleep(this.timeInterval);
             }
         } catch (Exception e) {
@@ -67,6 +81,15 @@ public class Clock {
     public boolean getRuns(){
         return this.runs;
     }
+    public ClockUIService getClockUIService() {
+        return clockUIService;
+    }
+    public LocalDate getCurrentDate() {
+        return currentDate;
+    }
+    public DateTimeFormatter getDateFormatter() {
+        return dateFormatter;
+    }
 
     // setter
     public void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
@@ -83,6 +106,15 @@ public class Clock {
     }
     public void setTimeString(String timeString) {
         this.timeString = timeString;
+    }
+    public void setClockUIService(ClockUIService clockUIService) {
+        this.clockUIService = clockUIService;
+    }
+    public void setCurrentDate(LocalDate currentDate) {
+        this.currentDate = currentDate;
+    }
+    public void setDateFormatter(DateTimeFormatter dateFormatter) {
+        this.dateFormatter = dateFormatter;
     }
 
 
