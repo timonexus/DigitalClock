@@ -1,8 +1,11 @@
 package de.timonexus.digitalClock;
 
+import de.timonexus.digitalClock.backend.Clock;
+import de.timonexus.digitalClock.ui.UIType;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        new Clock(UIType.GUI).startClock();
     }
 }

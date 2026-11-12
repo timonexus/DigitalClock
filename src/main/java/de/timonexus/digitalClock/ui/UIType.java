@@ -1,27 +1,19 @@
 package de.timonexus.digitalClock.ui;
 
+import java.util.function.Supplier;
+
 public enum UIType {
-    
-    // enums
-    GUI(new GUI()),
-    CUI(new CUI());
 
-    // attributes
-    private UserInterfacesClock userInterfacesClock;
+    GUI(GUI::new),
+    CUI(CUI::new);
 
-    // constructor
-    UIType(UserInterfacesClock nUserInterfacesClock){
-        this.userInterfacesClock = nUserInterfacesClock;
+    private final Supplier<UserInterfacesClock> uiSupplier;
+
+    UIType(Supplier<UserInterfacesClock> uiSupplier) {
+        this.uiSupplier = uiSupplier;
     }
 
-    // getter
     public UserInterfacesClock getUserInterfacesClock() {
-        return userInterfacesClock;
+        return uiSupplier.get();
     }
-
-    // setter
-    public void setUserInterfacesClock(UserInterfacesClock userInterfacesClock) {
-        this.userInterfacesClock = userInterfacesClock;
-    }
-
 }

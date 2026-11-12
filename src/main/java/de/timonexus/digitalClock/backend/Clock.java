@@ -2,6 +2,10 @@ package de.timonexus.digitalClock.backend;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import de.timonexus.digitalClock.services.ClockUIService;
+import de.timonexus.digitalClock.ui.UIType;
 
 public class Clock {
     
@@ -13,11 +17,19 @@ public class Clock {
     private LocalDateTime time;
     private String timeString;
 
+    private ClockUIService clockUIService;
+
+    public Clock() {
+        this(UIType.CUI);
+    }
+
     // constructor
-    public Clock(){
+    public Clock(UIType n_UiType){
         this.runs = true;   
         this.timeInterval = 1000;
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        this.clockUIService = new ClockUIService(n_UiType);
     }
 
     // method for running the clock
@@ -26,6 +38,7 @@ public class Clock {
             while(runs){
                 this.time = LocalDateTime.now();
                 this.timeString = this.time.format(this.dateTimeFormatter);
+                this.clockUIService.setData(List.of(this.timeString));
                 Thread.sleep(this.timeInterval);
             }
         } catch (Exception e) {
