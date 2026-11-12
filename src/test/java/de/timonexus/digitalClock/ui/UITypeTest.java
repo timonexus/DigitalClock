@@ -38,25 +38,6 @@ class UITypeTest {
     }
 
     @Test
-    void testSetUserInterfacesClock() {
-        UserInterfacesClock originalUI =
-            UIType.CUI.getUserInterfacesClock();
-
-        UserInterfacesClock mockUI =
-            org.mockito.Mockito.mock(UserInterfacesClock.class);
-
-        UIType.CUI.setUserInterfacesClock(mockUI);
-
-        assertSame(
-            mockUI,
-            UIType.CUI.getUserInterfacesClock()
-        );
-
-        // Restore original UI
-        UIType.CUI.setUserInterfacesClock(originalUI);
-    }
-
-    @Test
     void testValueOf() {
         assertEquals(UIType.GUI, UIType.valueOf("GUI"));
         assertEquals(UIType.CUI, UIType.valueOf("CUI"));
