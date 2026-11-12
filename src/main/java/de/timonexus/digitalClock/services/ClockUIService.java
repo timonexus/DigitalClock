@@ -1,5 +1,6 @@
 package de.timonexus.digitalClock.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.timonexus.digitalClock.ui.UIType;
@@ -23,13 +24,19 @@ public class ClockUIService implements UIServices{
     }
 
     @Override
-    public String getData() {
-        return this.ui.getTime();
+    public List<String> getData() {
+        List<String> result = new ArrayList<>();
+        result.add(this.ui.getTime());
+        result.add(this.ui.getDate());
+        return result;
     }
 
     @Override
     public void setData(List<String> nData) {
         this.ui.setTime(nData.get(0));
+        if(nData.size() > 1){
+            this.ui.setDate(nData.get(1));
+        }
     }
 
     @Override

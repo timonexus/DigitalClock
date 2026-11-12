@@ -14,16 +14,24 @@ import javax.swing.SwingConstants;
 
 public class GUI extends JFrame implements UserInterfacesClock {
 
-    // attributes
+    // Constants
+    private static final Color BACKGROUND_COLOR = new Color(40, 44, 59);
+    private static final Color PRIMARY_COLOR = Color.WHITE;
+    private static final Color SECONDARY_COLOR = new Color(170, 180, 200);
+
+    private static final Font TIME_FONT = new Font("Segoe UI", Font.PLAIN, 120);
+    private static final Font DATE_FONT = new Font("Segoe UI", Font.PLAIN, 24);
+
+    // Attributes
     private final JPanel mainPanel;
-    private final JLabel timelabel;
+    private final JLabel timeLabel;
     private final JLabel dateLabel;
 
-    // constructor
+    // Constructor
     public GUI() {
         this.mainPanel = new JPanel();
-        this.dateLabel = new JLabel("Test", SwingConstants.CENTER);
-        this.timelabel = new JLabel("", SwingConstants.CENTER);
+        this.timeLabel = new JLabel("--:--:--", SwingConstants.CENTER);
+        this.dateLabel = new JLabel("", SwingConstants.CENTER);
 
         initializeFrame();
         initializeComponents();
@@ -31,54 +39,68 @@ public class GUI extends JFrame implements UserInterfacesClock {
         this.setVisible(true);
     }
 
-    // initializes the JFrame
+    // Initializes the JFrame
     private void initializeFrame() {
         this.setTitle("Digital Clock");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setUndecorated(true);
-        this.setBackground(new Color(40, 44, 59));
-        this.getContentPane().setBackground(new Color(40, 44, 59));
+
+        this.getContentPane().setBackground(BACKGROUND_COLOR);
         this.setLayout(new BorderLayout());
     }
 
-    // initializes the components
+    // Initializes the components
     private void initializeComponents() {
+        this.mainPanel.setBackground(BACKGROUND_COLOR);
+        this.mainPanel.setLayout(new BoxLayout(this.mainPanel, BoxLayout.Y_AXIS));
 
-        this.mainPanel.setBackground(new Color(40, 44, 59));
-        this.mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        // Time label
+        this.timeLabel.setForeground(PRIMARY_COLOR);
+        this.timeLabel.setFont(TIME_FONT);
+        this.timeLabel.setAlignmentX(CENTER_ALIGNMENT);
 
-        this.timelabel.setForeground(Color.WHITE);
-        Font timeFont = new Font("Segoe UI", Font.PLAIN, 120);
-        this.timelabel.setFont(timeFont);
+        // Date label
+        this.dateLabel.setForeground(SECONDARY_COLOR);
+        this.dateLabel.setFont(DATE_FONT);
+        this.dateLabel.setAlignmentX(CENTER_ALIGNMENT);
 
-        this.dateLabel.setForeground(Color.WHITE);
-        Font dateFont = new Font("Segoe UI", Font.PLAIN, 24);
-        this.dateLabel.setFont(dateFont);
-
+        // Layout
         this.mainPanel.add(Box.createVerticalGlue());
-        this.mainPanel.add(Box.createHorizontalGlue());
-        this.mainPanel.add(timelabel);
+        this.mainPanel.add(this.timeLabel);
         this.mainPanel.add(Box.createVerticalStrut(20));
-        this.mainPanel.add(dateLabel);
+        this.mainPanel.add(this.dateLabel);
         this.mainPanel.add(Box.createVerticalGlue());
-        this.mainPanel.add(Box.createHorizontalGlue());
 
         this.add(this.mainPanel, BorderLayout.CENTER);
     }
 
+    // Updates the displayed time
     @Override
     public void setTime(String nTime) {
-        this.timelabel.setText(nTime);
+        this.timeLabel.setText(nTime);
+    }
+
+    // Returns the displayed time
+    @Override
+    public String getTime() {
+        return this.timeLabel.getText();
+    }
+
+    // Updates the displayed date
+    @Override
+    public void setDate(String nDate) {
+        this.dateLabel.setText(nDate);
     }
 
     @Override 
-    public String getTime(){
-        return this.timelabel.getText();
+    public String getDate(){
+        return this.dateLabel.getText();
     }
 
+    // Refreshes the GUI
     @Override
     public void refresh() {
-        this.timelabel.repaint();
+        this.repaint();
     }
 }
