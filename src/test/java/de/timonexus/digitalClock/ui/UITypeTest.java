@@ -39,6 +39,9 @@ class UITypeTest {
 
     @Test
     void testSetUserInterfacesClock() {
+        UserInterfacesClock originalUI =
+            UIType.CUI.getUserInterfacesClock();
+
         UserInterfacesClock mockUI =
             org.mockito.Mockito.mock(UserInterfacesClock.class);
 
@@ -48,6 +51,9 @@ class UITypeTest {
             mockUI,
             UIType.CUI.getUserInterfacesClock()
         );
+
+        // Restore original UI
+        UIType.CUI.setUserInterfacesClock(originalUI);
     }
 
     @Test
