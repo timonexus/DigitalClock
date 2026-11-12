@@ -47,6 +47,11 @@ public class GUI extends JFrame implements UserInterfacesClock {
         this.label.setText(nTime);
     }
 
+    @Override 
+    public String getTime(){
+        return this.label.getText();
+    }
+
     @Override
     public void refresh() {
         this.label.repaint();
