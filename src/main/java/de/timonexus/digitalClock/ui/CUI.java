@@ -23,6 +23,11 @@ public class CUI implements UserInterfacesClock{
         this.print();
     }
 
+    @Override 
+    public String getTime(){
+        return currentTime;
+    }
+
     // method to hypotecially refresh the ui, but in the console this is not neccessary
     @Override
     public void refresh() {}
