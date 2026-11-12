@@ -1,0 +1,8 @@
+package de.timonexus.digitalClock.ui;
+
+public interface UserInterfacesClock {
+    
+    public void setTime(String nTime);
+    public void refresh();
+
+}
